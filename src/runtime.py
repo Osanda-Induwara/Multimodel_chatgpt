@@ -9,6 +9,7 @@ COLAB_DATA_ROOT = Path("/content/drive/MyDrive/TeaProject/dataset/Raw Dataset")
 KAGGLE_DATASET_ROOTS = [
     Path("/kaggle/input/tea-liquor-dataset"),
     Path("/kaggle/input/tea_liquor_dataset"),
+    Path("/kaggle/input/datasets/osandainduwara/tea-liquor-dataset"),
 ]
 LOCAL_DATA_ROOT = Path(r"C:\Users\ASUS\Desktop\Teacc\dataset\Raw Dataset")
 

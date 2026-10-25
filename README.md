@@ -19,7 +19,7 @@ python scripts\compare_experiments.py --task grade
 
 ## Kaggle
 
-Attach the private Kaggle dataset **tea_liquor_dataset** to the notebook using **Add Input**. The code automatically resolves its `Raw Dataset` folder under `/kaggle/input/tea-liquor-dataset/`; no path argument is needed. The first run creates `data/manifest.csv`.
+Attach the private Kaggle dataset **tea_liquor_dataset** to the notebook using **Add Input**. The code automatically resolves its `Raw Dataset` folder, including Kaggle's nested mount form `/kaggle/input/datasets/<owner>/tea-liquor-dataset/`; no path argument is needed. The first run creates `data/manifest.csv`.
 
 ```python
 # Previous Colab setup — keep commented when working in Kaggle.

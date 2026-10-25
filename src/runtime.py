@@ -2,9 +2,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+import os
 
 
 COLAB_DATA_ROOT = Path("/content/drive/MyDrive/TeaProject/dataset/Raw Dataset")
+KAGGLE_DATASET_ROOTS = [
+    Path("/kaggle/input/tea-liquor-dataset"),
+    Path("/kaggle/input/tea_liquor_dataset"),
+]
 LOCAL_DATA_ROOT = Path(r"C:\Users\ASUS\Desktop\Teacc\dataset\Raw Dataset")
 
 
@@ -16,8 +21,33 @@ def running_in_colab() -> bool:
         return False
 
 
+def running_in_kaggle() -> bool:
+    """Return True only inside a Kaggle notebook runtime."""
+    return bool(os.environ.get("KAGGLE_KERNEL_RUN_TYPE")) or Path("/kaggle/input").exists()
+
+
+def find_raw_dataset(dataset_root: Path) -> Path:
+    """Support either a direct Raw Dataset upload or an enclosing dataset folder."""
+    candidates = [dataset_root / "Raw Dataset", dataset_root / "dataset" / "Raw Dataset"]
+    candidates.extend(path for path in dataset_root.glob("**/Raw Dataset") if path.is_dir())
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
+    raise FileNotFoundError(
+        f"Raw Dataset was not found inside {dataset_root}. "
+        "Attach the Kaggle dataset 'tea_liquor_dataset' as notebook input."
+    )
+
+
 def get_data_root() -> Path:
-    """Mount Drive on Colab and return the project's Raw Dataset folder."""
+    """Return the Raw Dataset folder for Kaggle, Colab, or local development."""
+    if running_in_kaggle():
+        for dataset_root in KAGGLE_DATASET_ROOTS:
+            if dataset_root.is_dir():
+                return find_raw_dataset(dataset_root)
+        raise FileNotFoundError(
+            "Kaggle input 'tea_liquor_dataset' is not attached. Use Add Input in the notebook."
+        )
     if running_in_colab():
         from google.colab import drive  # type: ignore
         # This is a no-op when Drive is already mounted; otherwise Colab prompts once.
@@ -35,7 +65,9 @@ def get_data_root() -> Path:
 
 
 def get_cache_root() -> Path:
-    """Return fast ephemeral storage for preprocessed Colab images."""
+    """Return fast ephemeral storage for preprocessed runtime images."""
+    if running_in_kaggle():
+        return Path("/kaggle/working/tea_liquor_cache")
     if running_in_colab():
         return Path("/content/tea_liquor_cache")
     return Path(__file__).resolve().parents[1] / "data" / "tea_liquor_cache"

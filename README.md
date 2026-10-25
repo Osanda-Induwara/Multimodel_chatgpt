@@ -17,15 +17,22 @@ python scripts\tune.py --task grade --model efficientnet --trials 8
 python scripts\compare_experiments.py --task grade
 ```
 
-## Colab
+## Kaggle
 
-Run either training script directly. In a Colab runtime (including the VS Code Colab extension), it mounts Google Drive if needed, then uses `TeaProject/dataset/Raw Dataset`. The first run creates `data/manifest.csv` automatically.
+Attach the private Kaggle dataset **tea_liquor_dataset** to the notebook using **Add Input**. The code automatically resolves its `Raw Dataset` folder under `/kaggle/input/tea-liquor-dataset/`; no path argument is needed. The first run creates `data/manifest.csv`.
 
 ```python
-%cd /content/drive/MyDrive/TeaProject/Multimodel_chatgpt
+# Previous Colab setup — keep commented when working in Kaggle.
+# from google.colab import drive
+# drive.mount('/content/drive')
+
+!git clone --depth 1 https://github.com/Osanda-Induwara/Multimodel_chatgpt.git /kaggle/working/Multimodel_chatgpt
+%cd /kaggle/working/Multimodel_chatgpt
 !pip install -q -r requirements.txt
-!python scripts/train_grade.py --model efficientnet --epochs 20
+!python scripts/train_grade.py --model mobilenet --epochs 10 --batch-size 32 --lr 0.0003 --weight-decay 0.0001 --image-size 160 --patience 4
 ```
+
+Enable Kaggle Internet access only for the `git clone` step. Model outputs are saved to `/kaggle/working/Multimodel_chatgpt/results/` and can be downloaded from the notebook's Output panel after saving a version.
 
 Each run creates a folder in `results/` containing its configuration, learning curves, confusion matrix, classification report, and predictions. Use the same commands with `--model mobilenet`, `resnet`, `shufflenet`, or `squeezenet`.
 

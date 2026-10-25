@@ -45,8 +45,18 @@ def get_data_root() -> Path:
         for dataset_root in KAGGLE_DATASET_ROOTS:
             if dataset_root.is_dir():
                 return find_raw_dataset(dataset_root)
+        # Kaggle can alter a private dataset's mount slug. Fall back to inspecting
+        # every attached input and selecting the one that actually contains images.
+        input_root = Path("/kaggle/input")
+        for dataset_root in input_root.iterdir():
+            if dataset_root.is_dir():
+                try:
+                    return find_raw_dataset(dataset_root)
+                except FileNotFoundError:
+                    continue
         raise FileNotFoundError(
-            "Kaggle input 'tea_liquor_dataset' is not attached. Use Add Input in the notebook."
+            "No attached Kaggle input contains a 'Raw Dataset' folder. "
+            "Use Add Input and attach tea_liquor_dataset."
         )
     if running_in_colab():
         from google.colab import drive  # type: ignore

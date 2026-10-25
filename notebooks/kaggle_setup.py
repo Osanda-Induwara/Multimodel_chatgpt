@@ -12,9 +12,17 @@
 
 # %%
 # --- Kaggle setup ---
+# Option A: enable Internet in Settings > Session options, then clone from GitHub.
 # !git clone --depth 1 https://github.com/Osanda-Induwara/Multimodel_chatgpt.git /kaggle/working/Multimodel_chatgpt
 # %cd /kaggle/working/Multimodel_chatgpt
 # !pip install -q -r requirements.txt
+
+# %%
+# Option B: Internet-free setup. Upload the project code as a second private Kaggle
+# dataset (suggested name: multimodel-chatgpt-code), attach it with Add Input, then run:
+# !cp -r /kaggle/input/multimodel-chatgpt-code /kaggle/working/Multimodel_chatgpt
+# %cd /kaggle/working/Multimodel_chatgpt
+# !python -c "import torch, torchvision, cv2, pandas, sklearn, matplotlib, seaborn; print('Required packages available')"
 
 # %%
 # Verify the dataset mount and train grade classification.

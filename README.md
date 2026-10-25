@@ -32,7 +32,14 @@ Attach the private Kaggle dataset **tea_liquor_dataset** to the notebook using *
 !python scripts/train_grade.py --model mobilenet --epochs 10 --batch-size 32 --lr 0.0003 --weight-decay 0.0001 --image-size 160 --patience 4
 ```
 
-Enable Kaggle Internet access only for the `git clone` step. Model outputs are saved to `/kaggle/working/Multimodel_chatgpt/results/` and can be downloaded from the notebook's Output panel after saving a version.
+If cloning fails with `Could not resolve host: github.com`, enable **Settings → Session options → Internet** and restart the session. Kaggle documents Internet in the notebook Settings pane. If Internet cannot be enabled, upload this project as a second private Kaggle dataset, attach it with **Add Input**, and copy it before running:
+
+```python
+!cp -r /kaggle/input/multimodel-chatgpt-code /kaggle/working/Multimodel_chatgpt
+%cd /kaggle/working/Multimodel_chatgpt
+```
+
+Model outputs are saved to `/kaggle/working/Multimodel_chatgpt/results/` and can be downloaded from the notebook's Output panel after saving a version.
 
 Each run creates a folder in `results/` containing its configuration, learning curves, confusion matrix, classification report, and predictions. Use the same commands with `--model mobilenet`, `resnet`, `shufflenet`, or `squeezenet`.
 
